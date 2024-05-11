@@ -2,13 +2,13 @@
 
 import time
 import paho.mqtt.client as mqtt
-import multiprocessing
-
+#import multiprocessing
 
 ## MQTT Parameters
 hostname = "Rpi"
 broker_port = 1883
 topic = "80"
+#broker_address = "192.168.1.101"
 broker_address = "192.168.1.104"
 
 

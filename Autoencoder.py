@@ -42,25 +42,29 @@ def normalize_data(data):
 def Autoencoder(data, interpreter):
 
     values = normalize_data(data)
-
-    values = np.array(values)
-    
+   
     # Make prediction from model
-    in_tensor = np.float32(values.reshape(1, values.shape[0]))
-    interpreter.set_tensor(input_details[0]['index'], in_tensor)
-    interpreter.invoke()
-    output_data = interpreter.get_tensor(output_details[0]['index'])
-    pred = output_data[0]
-    print("Prediction:", pred)
+    for n in values:
+        n = np.array([n])
+        in_tensor = np.float32(n.reshape(1, 1, 1, n.shape[0]))
+        interpreter.set_tensor(input_details[0]['index'], in_tensor)
+        interpreter.invoke()
+        output_data = interpreter.get_tensor(output_details[0]['index'])
+        pred = output_data[0]
 
-    # Calculate MSE
-    mae = np.abs(values - pred)
-    print("MAE:", mae)
-    
-    # Compare MSE the threshold
-    if mae > THRESHOLD:
-        print("ANOMALY DETECTED!")
-    else:
-        print("Normal")
+        acum = 0
+        for i in range(pred.shape[0]):
+            acum += pred[i][0]
 
-    return
+        pred_val = acum/pred.shape[0]
+        print("Prediction:", pred_val)
+
+        # Calculate MSE
+        mae = np.abs(n - pred_val)
+        print("MAE:", mae)
+        
+        # Compare MSE the threshold
+        if mae > THRESHOLD:
+            print("ANOMALY DETECTED!\n")
+        else:
+            print("Normal\n")
