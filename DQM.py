@@ -101,7 +101,10 @@ def plausability(data1, data2, ref):
         if dim > val:
             sum_d2 += (dim - val)/(1 - val)
     
-    a = sum_d1/(sum_d1 + sum_d2)
+    if (sum_d1 + sum_d2) > 0:
+        a = sum_d1/(sum_d1 + sum_d2)
+    else:
+        a = 0
 
     return a
 
