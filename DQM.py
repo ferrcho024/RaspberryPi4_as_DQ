@@ -46,11 +46,12 @@ def uncertainty(data1, data2):
     try:
         if len(data1) == len(data2):
             uncer = np.sqrt(((data1 - data2).pow(2).sum())/(2*(data1 + data2).count()*((data1 + data2).mean())**2))
-            uncer = round(1-uncer,2)
+            uncer = 1-uncer
+            #uncer = round(1-uncer,2)
             uncer = max(0,uncer)
 
-            rmse = np.sqrt(((data1 - data2).pow(2).sum())/len(data1-data2))
-            rmse = round(rmse,2)
+            #rmse = np.sqrt(((data1 - data2).pow(2).sum())/len(data1-data2))
+            #rmse = round(rmse,5)
 
             return uncer
         

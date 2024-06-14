@@ -42,9 +42,10 @@ def normalize_data(data):
 def Autoencoder(data, interpreter):
 
     values = normalize_data(data)
+    txt = ""
    
     # Make prediction from model
-    for n in values:
+    for n, d in zip(values, data):
         n = np.array([n])
         in_tensor = np.float32(n.reshape(1, 1, 1, n.shape[0]))
         interpreter.set_tensor(input_details[0]['index'], in_tensor)
@@ -57,14 +58,19 @@ def Autoencoder(data, interpreter):
             acum += pred[i][0]
 
         pred_val = acum/pred.shape[0]
-        print("Prediction:", pred_val)
+        #print("Prediction:", pred_val)
 
         # Calculate MSE
-        mae = np.abs(n - pred_val)
-        print("MAE:", mae)
+        mae = np.abs(n - pred_val)[0]
+        #print("MAE:", mae)
         
         # Compare MSE the threshold
         if mae > THRESHOLD:
-            print("ANOMALY DETECTED!\n")
+            outlier = "Y"
         else:
-            print("Normal\n")
+            outlier = "N"
+              
+        #print(f"{d:.5f},{outlier},{mae:.5f}")
+        txt += f"{d:.5f},{outlier},{mae:.5f}\n"
+    
+    return txt
